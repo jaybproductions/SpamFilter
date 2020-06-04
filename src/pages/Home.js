@@ -19,7 +19,7 @@ const Home = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>All Spam</IonTitle>
+          <IonTitle>Home</IonTitle>
         </IonToolbar>
       </IonHeader>
 
