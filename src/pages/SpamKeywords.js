@@ -19,7 +19,7 @@ const SpamKeywords = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle></IonTitle>
+          <IonTitle>Keywords</IonTitle>
         </IonToolbar>
       </IonHeader>
 

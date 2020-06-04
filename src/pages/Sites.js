@@ -19,7 +19,7 @@ const Sites = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle></IonTitle>
+          <IonTitle>Your Sites</IonTitle>
         </IonToolbar>
       </IonHeader>
 

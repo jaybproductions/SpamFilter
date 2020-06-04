@@ -19,7 +19,7 @@ const MostCalled = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle></IonTitle>
+          <IonTitle>Most Callers</IonTitle>
         </IonToolbar>
       </IonHeader>
 

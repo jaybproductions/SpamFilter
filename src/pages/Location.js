@@ -19,7 +19,7 @@ const Location = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle></IonTitle>
+          <IonTitle>Filter By Location</IonTitle>
         </IonToolbar>
       </IonHeader>
 

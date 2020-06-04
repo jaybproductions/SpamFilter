@@ -19,7 +19,7 @@ const KeywordReport = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle></IonTitle>
+          <IonTitle>Keywords Report</IonTitle>
         </IonToolbar>
       </IonHeader>
 

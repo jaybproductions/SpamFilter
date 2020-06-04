@@ -19,7 +19,7 @@ const AllSpam = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle></IonTitle>
+          <IonTitle>View All Spam</IonTitle>
         </IonToolbar>
       </IonHeader>
 
