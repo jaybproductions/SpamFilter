@@ -19,7 +19,7 @@ import React from "react";
 
 import "./Page.css";
 
-const Home = () => {
+const Settings = () => {
   return (
     <IonPage>
       <IonHeader>
@@ -41,13 +41,12 @@ const Home = () => {
           <IonRow>
             <IonCol>
               <IonCard>
-                <IonCardHeader>Your Sites</IonCardHeader>
+                <IonCardHeader>Edit Your Profile</IonCardHeader>
                 <IonCardContent>
                   <IonList>
-                    <IonItem>example.com</IonItem>
-                    <IonItem>example.com</IonItem>
-                    <IonItem>example.com</IonItem>
-                    <IonItem>example.com</IonItem>
+                    <IonItem>Name</IonItem>
+                    <IonItem>Phone Number</IonItem>
+                    <IonItem>Email Address</IonItem>
                   </IonList>
                 </IonCardContent>
               </IonCard>
@@ -67,11 +66,7 @@ const Home = () => {
             </IonCol>
           </IonRow>
           <IonCol>
-            <IonRow>
-              <IonCard>
-                <IonCardContent>Hello</IonCardContent>
-              </IonCard>
-            </IonRow>
+            <IonRow></IonRow>
           </IonCol>
         </IonGrid>
       </IonContent>
@@ -79,4 +74,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Settings;

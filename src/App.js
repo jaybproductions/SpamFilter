@@ -30,25 +30,37 @@ import SpamKeywords from "./pages/SpamKeywords";
 import MostCalled from "./pages/MostCalled";
 import KeywordReport from "./pages/KeywordReport";
 import Location from "./pages/Location";
+import Settings from "./pages/Settings";
+import Login from "./Auth/Login";
+import useAuth from "./hooks/useAuth";
+import UserContext from "./contexts/UserContext";
+import Signup from "./Auth/Signup";
 
 const App = () => {
+  const [user, setUser] = useAuth();
+
   return (
     <IonApp>
       <IonReactRouter>
-        <IonSplitPane contentId="main">
-          <Menu />
-          <IonRouterOutlet id="main">
-            <Route path="/page/:name" component={Page} exact />
-            <Route path="/spam" component={Spam} exact />
-            <Route path="/home" component={Home} exact />
-            <Route path="/sites" component={Sites} exact />
-            <Route path="/keywords" component={SpamKeywords} exact />
-            <Route path="/location-filter" component={Location} exact />
-            <Route path="/reports/most-called" component={MostCalled} exact />
-            <Route path="/reports/keywords" component={KeywordReport} exact />
-            <Redirect from="/" to="/page/Inbox" exact />
-          </IonRouterOutlet>
-        </IonSplitPane>
+        <UserContext.Provider value={{ user, setUser }}>
+          <IonSplitPane contentId="main">
+            <Menu />
+            <IonRouterOutlet id="main">
+              <Route path="/page/:name" component={Page} exact />
+              <Route path="/spam" component={Spam} exact />
+              <Route path="/home" component={Home} exact />
+              <Route path="/sites" component={Sites} exact />
+              <Route path="/keywords" component={SpamKeywords} exact />
+              <Route path="/location-filter" component={Location} exact />
+              <Route path="/reports/most-called" component={MostCalled} exact />
+              <Route path="/reports/keywords" component={KeywordReport} exact />
+              <Route path="/settings" component={Settings} exact />
+              <Route path="/login" component={Login} exact />
+              <Route path="/sign-up" component={Signup} exact />
+              <Redirect from="/" to="/page/Inbox" exact />
+            </IonRouterOutlet>
+          </IonSplitPane>
+        </UserContext.Provider>
       </IonReactRouter>
     </IonApp>
   );

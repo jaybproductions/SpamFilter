@@ -45,11 +45,34 @@ import {
   callSharp,
   mapOutline,
   mapSharp,
+  settingsOutline,
+  settingsSharp,
+  personCircleOutline,
+  personCircleSharp,
+  personAddOutline,
+  personAddSharp,
 } from "ionicons/icons";
 import "./Menu.css";
 import ToggleDark from "./DarkToggle";
+import UserContext from "../contexts/UserContext";
 
-const appPages = [
+const appPagesLoggedOut = [
+  {
+    title: "Login",
+    url: "/login",
+    iosIcon: personCircleOutline,
+    mdIcon: personCircleSharp,
+  },
+
+  {
+    title: "Sign Up",
+    url: "/sign-up",
+    iosIcon: personAddOutline,
+    mdIcon: personAddSharp,
+  },
+];
+
+const appPagesLoggedIn = [
   {
     title: "Home",
     url: "/home",
@@ -92,12 +115,25 @@ const appPages = [
     iosIcon: callOutline,
     mdIcon: callSharp,
   },
+  {
+    title: "Settings",
+    url: "/settings",
+    iosIcon: settingsOutline,
+    mdIcon: settingsSharp,
+  },
+  {
+    title: "Log Out",
+    url: "/logout",
+    iosIcon: personCircleOutline,
+    mdIcon: personCircleSharp,
+  },
 ];
 
 const labels = ["Family", "Friends", "Notes", "Work", "Travel", "Reminders"];
 
 const Menu = () => {
   const location = useLocation();
+  const { user } = React.useContext(UserContext);
 
   return (
     <IonMenu contentId="main" type="overlay">
@@ -105,28 +141,57 @@ const Menu = () => {
         <IonList id="inbox-list">
           <IonListHeader>Spam Filter</IonListHeader>
           <IonNote>Your #1 Option for filtering spam.</IonNote>
-          {appPages.map((appPage, index) => {
-            return (
-              <IonMenuToggle key={index} autoHide={false}>
-                <IonItem
-                  className={
-                    location.pathname === appPage.url ? "selected" : ""
-                  }
-                  routerLink={appPage.url}
-                  routerDirection="none"
-                  lines="none"
-                  detail={false}
-                >
-                  <IonIcon
-                    slot="start"
-                    ios={appPage.iosIcon}
-                    md={appPage.mdIcon}
-                  />
-                  <IonLabel>{appPage.title}</IonLabel>
-                </IonItem>
-              </IonMenuToggle>
-            );
-          })}
+          {user ? (
+            <>
+              {appPagesLoggedIn.map((appPage, index) => {
+                return (
+                  <IonMenuToggle key={index} autoHide={false}>
+                    <IonItem
+                      className={
+                        location.pathname === appPage.url ? "selected" : ""
+                      }
+                      routerLink={appPage.url}
+                      routerDirection="none"
+                      lines="none"
+                      detail={false}
+                    >
+                      <IonIcon
+                        slot="start"
+                        ios={appPage.iosIcon}
+                        md={appPage.mdIcon}
+                      />
+                      <IonLabel>{appPage.title}</IonLabel>
+                    </IonItem>
+                  </IonMenuToggle>
+                );
+              })}
+            </>
+          ) : (
+            <>
+              {appPagesLoggedOut.map((appPage, index) => {
+                return (
+                  <IonMenuToggle key={index} autoHide={false}>
+                    <IonItem
+                      className={
+                        location.pathname === appPage.url ? "selected" : ""
+                      }
+                      routerLink={appPage.url}
+                      routerDirection="none"
+                      lines="none"
+                      detail={false}
+                    >
+                      <IonIcon
+                        slot="start"
+                        ios={appPage.iosIcon}
+                        md={appPage.mdIcon}
+                      />
+                      <IonLabel>{appPage.title}</IonLabel>
+                    </IonItem>
+                  </IonMenuToggle>
+                );
+              })}
+            </>
+          )}
         </IonList>
 
         <ToggleDark />
