@@ -16,96 +16,80 @@ import firebase from "../firebase";
 import UserContext from "../contexts/UserContext";
 
 import "./Page.css";
-import MessageList from "../components/MessageList";
+import SentMessageList from "../components/SentMessageList";
+import BlockedMessageList from "../components/BlockedMessageList";
 
 const AllSpam = () => {
   const { user } = React.useContext(UserContext);
-
   const [message, setMessage] = React.useState("");
   const [email, setEmail] = React.useState("");
-  const [keywords, setKeywords] = React.useState([]);
-  const [allMessages, setAllMessages] = React.useState([]);
-  const [isBlocked, setIsBlocked] = React.useState(null);
-  const [gotData, setGotData] = React.useState(false);
+
+  const [allBlockedMessages, setAllBlockedMessages] = React.useState([]);
+  const [allSentMessages, setAllSentMessages] = React.useState([]);
+  const [isBlocked, setIsBlocked] = React.useState(false);
+  const [gotData, setGotData] = React.useState(null);
 
   React.useEffect(() => {
-    getEmails();
-    getKeywords();
-  }, [gotData]);
+    getBlockedEmails();
+    getSentEmails();
+  }, [!gotData]);
 
-  async function getEmails() {
-    axios({
-      url: `http://localhost:80/contactforms/email`,
-      method: "get",
-      headers: { "Content-Type": "application/json" },
-      //es-lint disable next line
-    }).then((res) => {
-      console.log(res);
-      console.log(res.data);
-      var data = res.data;
-
-      console.log(
-        "email: " + res.data[0].email,
-        "message: " + res.data[0].message
-      );
-
-      setMessage(res.data[0].message);
-      setEmail(res.data[0].email);
-      setAllMessages(data);
-      console.log(allMessages);
-    });
-  }
-
-  async function getKeywords() {
+  async function getBlockedEmails() {
     if (!user) {
       console.log("waiting to connect");
     } else {
-      setGotData(true);
-      return firebase.db
-        .collection("users")
-        .where("id", "==", `${user.uid}`)
+      await axios({
+        url: `http://localhost:81/users/${user.uid}/blockedemails`,
+        method: "get",
+        headers: { "Content-Type": "application/json" },
+        //es-lint disable next line
+      }).then((res) => {
+        try {
+          console.log(res);
+          console.log(res.data);
+          var data = res.data;
 
-        .onSnapshot(handleSnapshot);
+          console.log(
+            "email: " + res.data[0].email,
+            "message: " + res.data[0].message
+          );
+
+          setAllBlockedMessages(data);
+          console.log(allSentMessages);
+        } catch (err) {
+          console.log("no sent messages");
+        }
+      });
     }
   }
 
-  function handleSnapshot(snapshot) {
-    const keywords = snapshot.docs.map((doc) => {
-      return { id: doc.id, ...doc.data() };
-    });
-    setKeywords(keywords);
-    console.log(keywords[0].keywords);
-  }
-
-  function checkGet() {
-    keywords[0].keywords.forEach((keyword) => {
-      if (message.indexOf(keyword) > -1) {
-        console.log(message, keyword);
-        setIsBlocked(true);
-        return true;
-      }
-    });
-    setIsBlocked(false);
-    return false;
-  }
-
-  function sendOrNot() {
-    console.log(checkGet);
-    if (!isBlocked) {
-      firebase.db
-        .collection("mail")
-        .add({
-          to: "jayblar@gmail.com",
-          message: {
-            subject: "New Contact Form",
-            text: "",
-            html: `email: ${email} message: ${message}`,
-          },
-          isEmailBlocked: isBlocked,
-        })
-        .then(() => console.log("Queued email for delivery!"));
+  async function getSentEmails() {
+    if (!user) {
+      console.log("waiting to connect");
     } else {
-      console.log("Email Blocked");
+      await axios({
+        url: `http://localhost:81/users/${user.uid}/sentemails`,
+        method: "get",
+        headers: { "Content-Type": "application/json" },
+        //es-lint disable next line
+      }).then((res) => {
+        try {
+          console.log(res);
+          console.log(res.data);
+          var data = res.data;
+
+          console.log(
+            "email: " + res.data[0].email,
+            "message: " + res.data[0].message
+          );
+
+          setAllSentMessages(data);
+          console.log(allSentMessages);
+          setGotData(true);
+        } catch (err) {
+          console.log("no sent messages");
+        }
+      });
     }
   }
 
@@ -129,14 +113,29 @@ const AllSpam = () => {
 
         {user ? (
           <>
-            {allMessages.map((message, index) => {
+            <IonTitle>Blocked Messages</IonTitle>
+            {allBlockedMessages.map((message, index) => {
               return (
                 <>
-                  <MessageList
+                  <BlockedMessageList
                     key={index}
                     message={message.message}
                     email={message.email}
-                    isBlocked={isBlocked ? "Blocked" : "Sent"}
+                    isBlocked={isBlocked}
+                  />
+                </>
+              );
+            })}
+
+            <IonTitle>Sent Messages</IonTitle>
+            {allSentMessages.map((message, index) => {
+              return (
+                <>
+                  <SentMessageList
+                    key={index}
+                    message={message.message}
+                    email={message.email}
+                    isBlocked={isBlocked}
                   />
                 </>
               );
@@ -145,8 +144,6 @@ const AllSpam = () => {
         ) : (
           <IonLoading isOpen={!user} message={"loading..."} />
         )}
-
-        <IonButton onClick={sendOrNot}>TEST BLOCKER</IonButton>
       </IonContent>
     </IonPage>
   );
