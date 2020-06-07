@@ -45,17 +45,8 @@ const AllSpam = () => {
         //es-lint disable next line
       }).then((res) => {
         try {
-          console.log(res);
-          console.log(res.data);
           var data = res.data;
-
-          console.log(
-            "email: " + res.data[0].email,
-            "message: " + res.data[0].message
-          );
-
           setAllBlockedMessages(data);
-          console.log(allSentMessages);
         } catch (err) {
           console.log("no sent messages");
         }
@@ -74,17 +65,10 @@ const AllSpam = () => {
         //es-lint disable next line
       }).then((res) => {
         try {
-          console.log(res);
-          console.log(res.data);
           var data = res.data;
 
-          console.log(
-            "email: " + res.data[0].email,
-            "message: " + res.data[0].message
-          );
-
           setAllSentMessages(data);
-          console.log(allSentMessages);
+
           setGotData(true);
         } catch (err) {
           console.log("no sent messages");

@@ -26,10 +26,7 @@ const BlockedMessageList = ({ email, message, index, isBlocked }) => {
 
           created: Date.now(),
         },
-      }).then((res) => {
-        console.log(res);
-        console.log(res.data);
-      });
+      }).then((res) => {});
     }
 
     setSent(true);

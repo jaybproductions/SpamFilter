@@ -90,7 +90,7 @@ app.post("/users/:id/blockedemails", (req, res) => {
       },
     })
     .then(() => console.log("email added to blocked list"));
-  console.log(blockedEmailList);
+
   return res.send("blocked email list updated");
 });
 
