@@ -25,7 +25,7 @@ const AllSpam = () => {
   const [email, setEmail] = React.useState("");
   const [keywords, setKeywords] = React.useState([]);
   const [allMessages, setAllMessages] = React.useState([]);
-  const [isBlocked, setIsBlocked] = React.useState(false);
+  const [isBlocked, setIsBlocked] = React.useState(null);
   const [gotData, setGotData] = React.useState(false);
 
   React.useEffect(() => {
@@ -74,25 +74,24 @@ const AllSpam = () => {
       return { id: doc.id, ...doc.data() };
     });
     setKeywords(keywords);
-    console.log(keywords);
+    console.log(keywords[0].keywords);
   }
 
   function checkGet() {
-    var keywordToCheck = message.includes(keywords);
-    if (keywordToCheck) {
-      setIsBlocked(true);
-      return true;
-    } else {
-      setIsBlocked(false);
-      return false;
-    }
+    keywords[0].keywords.forEach((keyword) => {
+      if (message.indexOf(keyword) > -1) {
+        console.log(message, keyword);
+        setIsBlocked(true);
+        return true;
+      }
+    });
+    setIsBlocked(false);
+    return false;
   }
 
   function sendOrNot() {
-    console.log(isBlocked);
-    if (checkGet()) {
-      console.log("Email Blocked");
-    } else {
+    console.log(checkGet);
+    if (!isBlocked) {
       firebase.db
         .collection("mail")
         .add({
@@ -105,6 +104,8 @@ const AllSpam = () => {
           isEmailBlocked: isBlocked,
         })
         .then(() => console.log("Queued email for delivery!"));
+    } else {
+      console.log("Email Blocked");
     }
   }
 
@@ -135,7 +136,7 @@ const AllSpam = () => {
                     key={index}
                     message={message.message}
                     email={message.email}
-                    isBlocked={isBlocked}
+                    isBlocked={isBlocked ? "Blocked" : "Sent"}
                   />
                 </>
               );

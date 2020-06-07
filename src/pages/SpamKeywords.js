@@ -17,11 +17,13 @@ import useForm from "../hooks/useForm";
 import validateAddKeyword from "../validators/validateAddKeyword";
 import firebase from "../firebase";
 import UserContext from "../contexts/UserContext";
+import axios from "axios";
 
 import "./Page.css";
 
 const SpamKeywords = () => {
   const [keywords, setKeywords] = React.useState([]);
+  const [userInfo, setUserInfo] = React.useState([]);
   const { user } = React.useContext(UserContext);
 
   React.useEffect(() => {
@@ -59,10 +61,30 @@ const SpamKeywords = () => {
 
       linkRef.get().then((doc) => {
         if (!doc.exists) {
-          firebase.db.collection("users").doc(user.uid).add(newUser);
+          firebase.db.collection("users").doc(user.uid).set(newUser);
         } else {
           console.log("user already added");
         }
+
+        axios({
+          url: `http://localhost:81/users`,
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          //es-lint disable next line
+          data: {
+            id: user.uid,
+            name: user.displayName,
+
+            email: user.email,
+            emailVerified: user.emailVerified,
+            keywords: [],
+
+            created: Date.now(),
+          },
+        }).then((res) => {
+          console.log(res);
+          console.log(res.data);
+        });
       });
     }
   }
@@ -71,11 +93,15 @@ const SpamKeywords = () => {
     if (!user) {
       console.log("waiting to connect");
     } else {
-      return firebase.db
-        .collection("users")
-        .where("id", "==", `${user.uid}`)
+      try {
+        return firebase.db
+          .collection("users")
+          .where("id", "==", `${user.uid}`)
 
-        .onSnapshot(handleSnapshot);
+          .onSnapshot(handleSnapshot);
+      } catch (err) {
+        console.log("no keywords added");
+      }
     }
   }
 
@@ -83,8 +109,11 @@ const SpamKeywords = () => {
     const keywords = snapshot.docs.map((doc) => {
       return { id: doc.id, ...doc.data() };
     });
-    setKeywords(keywords);
-    console.log(keywords);
+    setUserInfo(keywords);
+    setKeywords(keywords[0].keywords);
+
+    console.log(userInfo);
+    console.log(keywords[0].keywords);
   }
 
   function handleAddKeyword() {
@@ -99,6 +128,17 @@ const SpamKeywords = () => {
           const newKeyword = values.keyword;
           const updatedKeywords = [newKeyword, ...previousKeywords];
           linkRef.update({ keywords: updatedKeywords });
+
+          axios({
+            url: `http://localhost:81/users/${user.uid}/keywords`,
+            method: "post",
+            headers: { "Content-Type": "application/json" },
+            //es-lint disable next line
+            data: { keywords },
+          }).then((res) => {
+            console.log(res);
+            console.log(res.data);
+          });
         } else {
           console.log("user already added");
         }
@@ -137,7 +177,7 @@ const SpamKeywords = () => {
             <IonTitle size="large"></IonTitle>
           </IonToolbar>
         </IonHeader>
-        {Object.values(keywords).map((keyword, index) => (
+        {keywords.map((keyword, index) => (
           <>
             <KeywordList key={index} keyword={keyword} index={index} />
           </>
