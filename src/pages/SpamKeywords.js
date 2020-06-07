@@ -26,9 +26,7 @@ const SpamKeywords = () => {
 
   React.useEffect(() => {
     const unsubscribe = getKeywords();
-    return () => {
-      unsubscribe();
-    };
+    return () => unsubscribe();
     // eslint-disable-next-line
   }, []);
 
@@ -41,28 +39,44 @@ const SpamKeywords = () => {
     handleAddKeyword
   );
 
-  function handleAddKeyword() {
+  function handleAddUser() {
     if (!user) {
       console.log("Waiting to Connect...");
     } else {
       const { keyword } = values;
+      const linkRef = firebase.db.collection("users").doc(user.uid);
+
       const newUser = {
         id: user.uid,
         name: user.displayName,
 
         email: user.email,
         emailVerified: user.emailVerified,
-        keywords: [...keywords, keyword],
+        keywords: [],
 
         created: Date.now(),
       };
-      firebase.db.collection("users").doc(user.uid).set(newUser);
-      console.log("User added to database");
+
+      linkRef.get().then((doc) => {
+        if (!doc.exists) {
+          firebase.db.collection("users").doc(user.uid).add(newUser);
+        } else {
+          console.log("user already added");
+        }
+      });
     }
   }
 
   function getKeywords() {
-    return firebase.db.collection("users").onSnapshot(handleSnapshot);
+    if (!user) {
+      console.log("waiting to connect");
+    } else {
+      return firebase.db
+        .collection("users")
+        .where("id", "==", `${user.uid}`)
+
+        .onSnapshot(handleSnapshot);
+    }
   }
 
   function handleSnapshot(snapshot) {
@@ -71,6 +85,27 @@ const SpamKeywords = () => {
     });
     setKeywords(keywords);
     console.log(keywords);
+  }
+
+  function handleAddKeyword() {
+    handleAddUser();
+    if (!user) {
+      console.log("Waiting to Connect...");
+    } else {
+      const linkRef = firebase.db.collection("users").doc(user.uid);
+      linkRef.get().then((doc) => {
+        if (doc.exists) {
+          const previousKeywords = doc.data().keywords;
+          const newKeyword = values.keyword;
+          const updatedKeywords = [newKeyword, ...previousKeywords];
+          linkRef.update({ keywords: updatedKeywords });
+        } else {
+          console.log("user already added");
+        }
+      });
+
+      console.log("Keyword Added");
+    }
   }
 
   return (

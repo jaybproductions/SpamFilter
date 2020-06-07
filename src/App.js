@@ -35,6 +35,7 @@ import Login from "./Auth/Login";
 import useAuth from "./hooks/useAuth";
 import UserContext from "./contexts/UserContext";
 import Signup from "./Auth/Signup";
+import AllSpam from "./pages/AllSpam";
 
 const App = () => {
   const [user, setUser] = useAuth();
@@ -51,6 +52,7 @@ const App = () => {
               <Route path="/home" component={Home} exact />
               <Route path="/sites" component={Sites} exact />
               <Route path="/keywords" component={SpamKeywords} exact />
+              <Route path="/all" component={AllSpam} exact />
               <Route path="/location-filter" component={Location} exact />
               <Route path="/reports/most-called" component={MostCalled} exact />
               <Route path="/reports/keywords" component={KeywordReport} exact />
