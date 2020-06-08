@@ -80,6 +80,7 @@ app.post("/users/:id/blockedemails", (req, res) => {
   blockedEmailList.unshift(blockedEmail);
   firebase.db
     .collection("blockedmail")
+    //need to fix
     .doc("bjWKTCQOWxRP3NEpRvmY6TC0Lv02")
     .set({
       to: "jayblar@gmail.com",
@@ -98,6 +99,7 @@ app.get("/users/:id/sendanyway", (req, res) => {
   res.send("Email has been sent anyway");
 });
 
+//need to add delete from blocked and add to send
 app.post("/users/:id/sendanyway", (req, res) => {
   const toEmail = req.body.emailToSend;
   const message = req.body.messageToSend;
