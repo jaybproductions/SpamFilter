@@ -1,12 +1,22 @@
 import React from "react";
-import { IonList, IonItem, IonButton } from "@ionic/react";
+import {
+  IonList,
+  IonItem,
+  IonButton,
+  IonCard,
+  IonCardContent,
+} from "@ionic/react";
 
 const SentMessageList = ({ email, message, index, isBlocked }) => {
   return (
-    <IonList>
-      <IonItem>{email}</IonItem>
-      <IonItem>{message}</IonItem>
-    </IonList>
+    <IonCard>
+      <IonCardContent>
+        <IonList>
+          <IonItem>{email}</IonItem>
+          <IonItem>{message}</IonItem>
+        </IonList>
+      </IonCardContent>
+    </IonCard>
   );
 };
 

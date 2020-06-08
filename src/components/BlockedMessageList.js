@@ -1,5 +1,11 @@
 import React from "react";
-import { IonList, IonItem, IonButton } from "@ionic/react";
+import {
+  IonList,
+  IonItem,
+  IonButton,
+  IonCard,
+  IonCardContent,
+} from "@ionic/react";
 import axios from "axios";
 import UserContext from "../contexts/UserContext";
 
@@ -33,15 +39,19 @@ const BlockedMessageList = ({ email, message, index, isBlocked }) => {
   }
 
   return (
-    <IonList>
-      <IonItem>{email}</IonItem>
-      <IonItem>{message}</IonItem>
-      <IonItem>
-        <IonButton onClick={sendBlockedEmail} disabled={sent}>
-          Send Anyway
-        </IonButton>
-      </IonItem>
-    </IonList>
+    <IonCard>
+      <IonCardContent>
+        <IonList>
+          <IonItem>{email}</IonItem>
+          <IonItem>{message}</IonItem>
+          <IonItem>
+            <IonButton onClick={sendBlockedEmail} disabled={sent}>
+              Send Anyway
+            </IonButton>
+          </IonItem>
+        </IonList>
+      </IonCardContent>
+    </IonCard>
   );
 };
 

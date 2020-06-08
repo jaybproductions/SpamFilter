@@ -13,6 +13,20 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-primary-shade: #3171e0;
   --ion-color-primary-tint: #4c8dff;
 
+  --ion-color-sent-emails: #69bb7b;
+  --ion-color-sent-emails-rgb: 105, 187, 123;
+  --ion-color-sent-emails-contrast: #ffffff;
+  --ion-color-sent-emails-contrast-rgb: 0, 0, 0;
+  --ion-color-sent-emails-shade: #5ca56c;
+  --ion-color-sent-emails-tint: #78c288;
+
+  --ion-color-blocked-emails: #bf4a4a;
+  --ion-color-blocked-emails-rgb: 191, 74, 74;
+  --ion-color-blocked-emails-contrast: #ffffff;
+  --ion-color-blocked-emails-contrast-rgb: 255, 255, 255;
+  --ion-color-blocked-emails-shade: #a84141;
+  --ion-color-blocked-emails-tint: #c55c5c;
+
   /** secondary **/
   --ion-color-secondary: #3dc2ff;
   --ion-color-secondary-rgb: 61, 194, 255;
@@ -385,4 +399,21 @@ body.dark {
 
 .github-icon {
   color: aliceblue;
+}
+.ion-color-sent-emails {
+  --ion-color-base: var(--ion-color-sent-emails);
+  --ion-color-base-rgb: var(--ion-color-sent-emails-rgb);
+  --ion-color-contrast: var(--ion-color-sent-emails-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-sent-emails-contrast-rgb);
+  --ion-color-shade: var(--ion-color-sent-emails-shade);
+  --ion-color-tint: var(--ion-color-sent-emails-tint);
+}
+
+.ion-color-blocked-emails {
+  --ion-color-base: var(--ion-color-blocked-emails);
+  --ion-color-base-rgb: var(--ion-color-blocked-emails-rgb);
+  --ion-color-contrast: var(--ion-color-blocked-emails-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-blocked-emails-contrast-rgb);
+  --ion-color-shade: var(--ion-color-blocked-emails-shade);
+  --ion-color-tint: var(--ion-color-blocked-emails-tint);
 }

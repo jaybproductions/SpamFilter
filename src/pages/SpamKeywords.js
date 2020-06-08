@@ -10,6 +10,12 @@ import {
   IonLabel,
   IonItem,
   IonButton,
+  IonCardContent,
+  IonCard,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonIcon,
 } from "@ionic/react";
 import React from "react";
 import KeywordList from "../components/KeywordList";
@@ -20,6 +26,7 @@ import UserContext from "../contexts/UserContext";
 import axios from "axios";
 
 import "./Page.css";
+import { addCircleSharp } from "ionicons/icons";
 
 const SpamKeywords = () => {
   const [keywords, setKeywords] = React.useState([]);
@@ -27,10 +34,10 @@ const SpamKeywords = () => {
   const { user } = React.useContext(UserContext);
 
   React.useEffect(() => {
-    const unsubscribe = getKeywords();
-    return () => unsubscribe();
+    getKeywords();
+
     // eslint-disable-next-line
-  }, []);
+  }, [user]);
 
   const INITIAL_STATE = {
     keyword: "",
@@ -149,19 +156,29 @@ const SpamKeywords = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Keywords</IonTitle>
 
-          <IonItem lines="full">
-            <IonLabel position="floating">Add Keyword</IonLabel>
-            <IonInput
-              name="keyword"
-              type="text"
-              required
-              value={values.keyword}
-              onIonChange={handleChange}
-            ></IonInput>
-            <IonButton onClick={handleSubmit}>Add</IonButton>
-          </IonItem>
+          <IonGrid>
+            <IonRow>
+              <IonCol>
+                <IonItem lines="full">
+                  <IonLabel position="floating">Add Keyword</IonLabel>
+                  <IonInput
+                    name="keyword"
+                    type="text"
+                    required
+                    value={values.keyword}
+                    onIonChange={handleChange}
+                    size="small"
+                  ></IonInput>
+                </IonItem>
+              </IonCol>
+              <IonCol>
+                <IonButton onClick={handleSubmit}>
+                  <IonIcon icon={addCircleSharp} />
+                </IonButton>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
         </IonToolbar>
       </IonHeader>
 
@@ -171,11 +188,15 @@ const SpamKeywords = () => {
             <IonTitle size="large"></IonTitle>
           </IonToolbar>
         </IonHeader>
-        {keywords.map((keyword, index) => (
-          <>
-            <KeywordList key={index} keyword={keyword} index={index} />
-          </>
-        ))}
+        <IonCard color="primary">
+          <IonCardContent>
+            {keywords.map((keyword, index) => (
+              <>
+                <KeywordList key={index} keyword={keyword} index={index} />
+              </>
+            ))}
+          </IonCardContent>
+        </IonCard>
       </IonContent>
     </IonPage>
   );

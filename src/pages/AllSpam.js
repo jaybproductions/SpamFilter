@@ -9,6 +9,11 @@ import {
   IonItem,
   IonButton,
   IonLoading,
+  IonCard,
+  IonCardContent,
+  IonGrid,
+  IonRow,
+  IonCol,
 } from "@ionic/react";
 import React from "react";
 import axios from "axios";
@@ -21,24 +26,23 @@ import BlockedMessageList from "../components/BlockedMessageList";
 
 const AllSpam = () => {
   const { user } = React.useContext(UserContext);
-  const [message, setMessage] = React.useState("");
-  const [email, setEmail] = React.useState("");
 
   const [allBlockedMessages, setAllBlockedMessages] = React.useState([]);
   const [allSentMessages, setAllSentMessages] = React.useState([]);
   const [isBlocked, setIsBlocked] = React.useState(false);
   const [gotData, setGotData] = React.useState(null);
+  const [checkNew, setCheckNew] = React.useState(false);
 
   React.useEffect(() => {
     getBlockedEmails();
     getSentEmails();
-  }, [!gotData]);
+  }, [user, checkNew]);
 
-  async function getBlockedEmails() {
+  function getBlockedEmails() {
     if (!user) {
       console.log("waiting to connect");
     } else {
-      await axios({
+      axios({
         url: `http://localhost:81/users/${user.uid}/blockedemails`,
         method: "get",
         headers: { "Content-Type": "application/json" },
@@ -54,11 +58,11 @@ const AllSpam = () => {
     }
   }
 
-  async function getSentEmails() {
+  function getSentEmails() {
     if (!user) {
       console.log("waiting to connect");
     } else {
-      await axios({
+      axios({
         url: `http://localhost:81/users/${user.uid}/sentemails`,
         method: "get",
         headers: { "Content-Type": "application/json" },
@@ -68,8 +72,6 @@ const AllSpam = () => {
           var data = res.data;
 
           setAllSentMessages(data);
-
-          setGotData(true);
         } catch (err) {
           console.log("no sent messages");
         }
@@ -85,6 +87,7 @@ const AllSpam = () => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle>View All Spam</IonTitle>
+          <IonButton slot="end">Check For New Mail</IonButton>
         </IonToolbar>
       </IonHeader>
 
@@ -97,33 +100,48 @@ const AllSpam = () => {
 
         {user ? (
           <>
-            <IonTitle>Blocked Messages</IonTitle>
-            {allBlockedMessages.map((message, index) => {
-              return (
-                <>
-                  <BlockedMessageList
-                    key={index}
-                    message={message.message}
-                    email={message.email}
-                    isBlocked={isBlocked}
-                  />
-                </>
-              );
-            })}
-
-            <IonTitle>Sent Messages</IonTitle>
-            {allSentMessages.map((message, index) => {
-              return (
-                <>
-                  <SentMessageList
-                    key={index}
-                    message={message.message}
-                    email={message.email}
-                    isBlocked={isBlocked}
-                  />
-                </>
-              );
-            })}
+            <IonGrid>
+              <IonRow>
+                <IonCol>
+                  <IonCard color="blocked-emails">
+                    <IonCardContent>
+                      <IonTitle>Blocked Messages</IonTitle>
+                      {allBlockedMessages.map((message, index) => {
+                        return (
+                          <>
+                            <BlockedMessageList
+                              key={index}
+                              message={message.message}
+                              email={message.email}
+                              isBlocked={isBlocked}
+                            />
+                          </>
+                        );
+                      })}
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+                <IonCol>
+                  <IonCard color="sent-emails">
+                    <IonCardContent>
+                      <IonTitle>Sent Messages</IonTitle>
+                      {allSentMessages.map((message, index) => {
+                        return (
+                          <>
+                            <SentMessageList
+                              key={index}
+                              message={message.message}
+                              email={message.email}
+                              isBlocked={isBlocked}
+                            />
+                          </>
+                        );
+                      })}
+                    </IonCardContent>{" "}
+                  </IonCard>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
           </>
         ) : (
           <IonLoading isOpen={!user} message={"loading..."} />

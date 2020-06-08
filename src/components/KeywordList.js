@@ -1,11 +1,15 @@
 import React from "react";
-import { IonList, IonItem } from "@ionic/react";
+import { IonList, IonItem, IonCard, IonCardContent } from "@ionic/react";
 
 const KeywordList = ({ keyword, index }) => {
   return (
-    <IonList>
-      <IonItem key={keyword.id}>{keyword}</IonItem>
-    </IonList>
+    <IonCard>
+      <IonCardContent>
+        <IonItem lines="none" key={keyword.id}>
+          {keyword}
+        </IonItem>
+      </IonCardContent>
+    </IonCard>
   );
 };
 
