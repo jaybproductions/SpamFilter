@@ -111,9 +111,6 @@ const SpamKeywords = () => {
     });
     setUserInfo(keywords);
     setKeywords(keywords[0].keywords);
-
-    console.log(userInfo);
-    console.log(keywords[0].keywords);
   }
 
   function handleAddKeyword() {
@@ -135,10 +132,7 @@ const SpamKeywords = () => {
             headers: { "Content-Type": "application/json" },
             //es-lint disable next line
             data: { keywords },
-          }).then((res) => {
-            console.log(res);
-            console.log(res.data);
-          });
+          }).then((res) => {});
         } else {
           console.log("user already added");
         }

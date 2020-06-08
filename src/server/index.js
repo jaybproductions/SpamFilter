@@ -27,7 +27,7 @@ app.get("/users", (req, res) => {
 app.post("/users", (req, res) => {
   var userInfo = req.body;
   users.unshift(userInfo);
-  return res.send("Server is running");
+  return res.send("need to fix");
 });
 
 app.get("/users/:id/keywords", (req, res) => {
