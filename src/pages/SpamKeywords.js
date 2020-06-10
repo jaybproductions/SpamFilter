@@ -138,7 +138,7 @@ const SpamKeywords = () => {
             method: "post",
             headers: { "Content-Type": "application/json" },
             //es-lint disable next line
-            data: { keywords },
+            data: { updatedKeywords },
           }).then((res) => {});
         } else {
           console.log("user already added");

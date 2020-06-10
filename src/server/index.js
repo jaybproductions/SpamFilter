@@ -34,6 +34,7 @@ app.get("/users/:id/keywords", (req, res) => {
   return res.send(keywords);
 });
 
+//need to add firebase request
 app.post("/users/:id/keywords", (req, res) => {
   var keywordlist = req.body;
   keywords.unshift(keywordlist);
@@ -78,19 +79,26 @@ app.get("/users/:id/blockedemails", (req, res) => {
 app.post("/users/:id/blockedemails", (req, res) => {
   var blockedEmail = req.body.newFormFill;
   blockedEmailList.unshift(blockedEmail);
-  firebase.db
-    .collection("blockedmail")
-    //need to fix
-    .doc("bjWKTCQOWxRP3NEpRvmY6TC0Lv02")
-    .set({
-      to: "jayblar@gmail.com",
-      message: {
-        subject: "New Contact Form",
-        text: "",
-        html: `email: ${req.body.newFormFill.email} message: ${req.body.newFormFill.message}`,
-      },
+  const linkRef = firebase.db.collection("blockedmail").doc(req.params.id);
+
+  linkRef
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        const previousMail = doc.data().mail;
+        const newMail = {
+          to: "jayblar@gmail.com",
+          message: {
+            subject: "New Contact Form",
+            text: "",
+            html: `email: ${req.body.newFormFill.email} message: ${req.body.newFormFill.message}`,
+          },
+        };
+        const updatedMail = [newMail, ...previousMail];
+        linkRef.update({ mail: updatedMail });
+      }
     })
-    .then(() => console.log("email added to blocked list"));
+    .then(console.log("Added to block list"));
 
   return res.send("blocked email list updated");
 });
