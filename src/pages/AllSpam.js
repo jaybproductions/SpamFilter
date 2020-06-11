@@ -38,6 +38,14 @@ const AllSpam = () => {
     getSentEmails();
   }, [user, checkNew]);
 
+  function checkForMail() {
+    if (!checkNew) {
+      setCheckNew(true);
+    } else {
+      setCheckNew(false);
+    }
+  }
+
   function getBlockedEmails() {
     if (!user) {
       console.log("waiting to connect");
@@ -87,7 +95,9 @@ const AllSpam = () => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle>View All Spam</IonTitle>
-          <IonButton slot="end">Check For New Mail</IonButton>
+          <IonButton slot="end" onClick={checkForMail}>
+            Check For New Mail
+          </IonButton>
         </IonToolbar>
       </IonHeader>
 

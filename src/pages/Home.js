@@ -67,11 +67,7 @@ const Home = () => {
             </IonCol>
           </IonRow>
           <IonCol>
-            <IonRow>
-              <IonCard>
-                <IonCardContent>Hello</IonCardContent>
-              </IonCard>
-            </IonRow>
+            <IonRow></IonRow>
           </IonCol>
         </IonGrid>
       </IonContent>
