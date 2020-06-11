@@ -121,12 +121,6 @@ const appPagesLoggedIn = [
     iosIcon: settingsOutline,
     mdIcon: settingsSharp,
   },
-  {
-    title: "Log Out",
-    url: "/logout",
-    iosIcon: personCircleOutline,
-    mdIcon: personCircleSharp,
-  },
 ];
 
 const labels = ["Family", "Friends", "Notes", "Work", "Travel", "Reminders"];

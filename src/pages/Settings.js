@@ -14,12 +14,23 @@ import {
   IonCardHeader,
   IonItem,
   IonList,
+  IonButton,
 } from "@ionic/react";
 import React from "react";
+import firebase from "../firebase";
+import toast from "../helpers/toast";
 
 import "./Page.css";
 
-const Settings = () => {
+const Settings = (props) => {
+  async function LogoutUser() {
+    try {
+      await firebase.logout();
+      props.history.push("/");
+    } catch (err) {
+      console.error("Unable to log out", err);
+    }
+  }
   return (
     <IonPage>
       <IonHeader>
@@ -66,7 +77,9 @@ const Settings = () => {
             </IonCol>
           </IonRow>
           <IonCol>
-            <IonRow></IonRow>
+            <IonRow>
+              <IonButton onClick={LogoutUser}>Logout</IonButton>
+            </IonRow>
           </IonCol>
         </IonGrid>
       </IonContent>
